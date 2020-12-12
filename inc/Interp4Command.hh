@@ -18,9 +18,6 @@
  */
  class Interp4Command {
   public:
-  
-  
-  
    /*!
     * \brief Destruktor wirtualny ze wzgledu na klasy pochodne
     *

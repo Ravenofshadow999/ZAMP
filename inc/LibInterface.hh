@@ -1,31 +1,27 @@
-#ifndef LIBINTERFACE_HH
-#define LIBINTERFACE_HH
+#ifndef	LIBINTERFACE_HH
+#define	LIBINTERFACE_HH
 
+#include <iostream>
 #include <dlfcn.h>
 #include <sstream>
 #include <string>
+#include <cassert>
+
 #include "Interp4Command.hh"
 
 class LibInterface
 {
-	void *_LibHandler;	// wskaznik "uchwyt" do wtyczki
-	std::string _CmdName;	// nazwa wtyczki (string)
-	Interp4Command *(* _pCreateCmd)(void);	
+	void * _pLibHnd;
+	std::string _CmdName;
+	Interp4Command *(*pCreateCmd)(void);
+	void *pFun;
 	
 	public:
-	//LibInterface(const char* LibName){}
-	LibInterface(const std::string &LibName);
-	~LibInterface(){};
+	LibInterface(const std::string LibPath);
+	~Libinterface(delete pCmd; dlclose(pLibHnd););
 	
-	bool  ReadParams(std::istream &Strm)	//wczytuje parametry do wtyczki
-	{	
-		return _pCreateCmd()->ReadParams(Strm);
-	}
-	
-	const std::string GetCmdName(){return _CmdName;}	//zwraca nazwe wtyczki
-	
-	
-	
+	Interp4Command *CreateCmd() {return _pCreateCmd();}
+	const std::string GetCmdName(){return _CmdName;}
 	
 };
 
