@@ -1,24 +1,28 @@
 #include "LibInterface.hh"
-#include <iostream>
 
-LibInterface::LibInterface(const std::string &LibName)
+LibInterface(const std::string sLibName)
 {
-	void *LibHandler = dlopen(LibName.c_str(),RTLD_LAZY);
-	void *FuncHandler;
+	//jak nie zadziala uzyj tego:
+	//void *LibHnd = dlopen(LibPath.c_str(),RTLD_LAZY);
+	//void *Fun;
+	this->pLibHnd = dlopen(sLibName.c_str(),RTLD_LAZY);
 	
-	std::cout << "Laduje wtyczke " << LibName << std::endl;
-	
-	
-	if(!LibHandler){
-		std::cerr << "Nie znaleziono biblioteki: " << LibName << std::endl;
-		std::cerr << dlerror() << std::endl;
+	if (!this->pLibHnd) 
+	{
+		cerr << "!!! Brak biblioteki: " << LibPath << std::endl;
+		return 1;
 	}
-	FuncHandler = dlsym(LibHandler,"CreateCmd");
-	if(!FuncHandler){
-		std::cerr << "Nie znaleziono polecnia " << std::endl;
+	
+	this->pFun = dlsym(this->pLibHnd,"CreateCmd");
+	if (!this->pFun) 
+	{
+		cerr << "!!! Nie znaleziono funkcji CreateCmd" << std::endl;
+		return 1;
 	}
-
-	_pCreateCmd = *reinterpret_cast<Interp4Command* (**)(void)>(&FuncHandler);
-	this->_LibHandler = LibHandler;
-	this->_CmdName=_pCreateCmd()->GetCmdName();
+	  
+	pCreateCmd = *reinterpret_cast<Interp4Command* (**)(void)>(&this->pFun);
+	//this->pLibHnd = LibHnd;
+	this-> sCmdName = pCreateCmd()->GetCmdName();
+	
+	
 }
