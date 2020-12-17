@@ -1,7 +1,7 @@
 #ifndef COMMAND4PAUSE_HH
 #define COMMAND4PAUSE_HH
 
-#ifndef _GNUG__
+#ifndef __GNUG__
 # pragma interface
 # pragma implementation
 #endif
@@ -11,9 +11,9 @@
 
 /*!
  * \file
- * \brief Definicja klasy Interp4Pause
+ * \brief Definicja klasy Interp4Move
  *
- * Plik zawiera definicję klasy Interp4Pause ...
+ * Plik zawiera definicję klasy Interp4Move ...
  */
 
 /*!
@@ -23,10 +23,14 @@
  */
 class Interp4Pause: public Interp4Command {
   /*!
-   *  \brief Klasa odpowiedzialna za wstrzymanie dzialania danego watku.
-   * \param czas_pauzy - wyraza czas trwania pauzy w s.
+   * 	\brief Parametry klasy 
+   * 	\param _CzasTrwania - podaje czas trwania pauzy w sekundach
    */
-  double  czas_pauzy;
+   
+  double  _CzasTrwania;
+
+  
+  
  public:
   /*!
    * \brief
@@ -35,31 +39,32 @@ class Interp4Pause: public Interp4Command {
   /*!
    * \brief Wyświetla postać bieżącego polecenia (nazwę oraz wartości parametrów)
    */
-  virtual void PrintCmd() const;
+  virtual void PrintCmd() const override ;
   /*!
    * \brief Wyświetla składnię polecenia
    */
-  virtual void PrintSyntax() const;
+  virtual void PrintSyntax() const override ;
   /*!
    * \brief Wyświetla nazwę polecenia
    */
-  virtual const char* GetCmdName() const;
+  virtual const char* GetCmdName() const override ;
   /*!
    * \brief Wykonuje polecenie oraz wizualizuje jego realizację
    */
-  virtual bool ExecCmd( MobileObj  *pMobObj, int Socket) const;
+  virtual bool ExecCmd( Scene *pScena) const override ;
   /*!
    * \brief Czyta wartości parametrów danego polecenia
    */
-  virtual bool ReadParams(std::istream& Strm_CmdsList);
+  virtual bool ReadParams(std::istream& Strm_CmdsList) override ;
   /*!
-   * \brief Wyświetla wartości wczytanych parametrów
+   * \brief Wczytuje wartości parametrów. Przyjmuje nastepujace parametry:
+   * \param Strm_CmdsList - adres strumienia wejsciowego
    */
-  virtual void PrintParams() {}
+  virtual void PrintParams(){}
   /*!
    * \brief
    *
-   *  Ta metoda nie musi być zdefiniowna w klasie bazowej.
+   *  Wypisuje wczytane parametry w terminalu.
    */
   static Interp4Command* CreateCmd();
  };

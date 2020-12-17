@@ -1,4 +1,8 @@
 #include <iostream>
+#include <string>
+#include <unistd.h>
+
+#include "Vector3D.hh"
 #include "Interp4Move.hh"
 #include "MobileObj.hh"
 
@@ -40,7 +44,7 @@ void Interp4Move::PrintCmd() const
   /*
    *  Tu trzeba napisać odpowiednio zmodyfikować kod poniżej.
    */
-  cout << GetCmdName() << " " << _Speed_mmS  << " " << dlugosc_drogi << endl;
+  cout << GetCmdName()<< " " << sName << " " << _Speed_mmS  << " " << dlugosc_drogi << endl;
 }
 
 
@@ -56,11 +60,31 @@ const char* Interp4Move::GetCmdName() const
 /*!
  *
  */
-bool Interp4Move::ExecCmd( MobileObj  *pMobObj,  int  Socket) const
+bool Interp4Move::ExecCmd( Scene *pScena) const
 {
   /*
    *  Tu trzeba napisać odpowiedni kod.
    */
+   int Fps = 100;
+	std::shared_ptr<MobileObj> pObject;
+	if (!pScena->Find(sName, pObject)){
+		std::cerr << "Object not found: " << sName << endl;
+		return 0;
+	}
+	Vector3D Pos;
+	int steps = (dlugosc_drogi/_Speed_mmS)*Fps;
+	if (steps < 0) steps *= -1;
+	for(int a = 0; a < steps; a ++){
+		// MODYFIKACJA
+		pScena->LockAccess();
+		Pos = pObject->GetPositoin_m();
+		Pos[0] += dlugosc_drogi/steps;
+		pObject->SetPosition_m(Pos);
+		pScena->MarkChange();
+		pScena->UnlockAccess();
+		// KONIEC MODYFIKCAJI
+		usleep(1000000/Fps);
+	}
   return true;
 }
 
@@ -70,7 +94,8 @@ bool Interp4Move::ExecCmd( MobileObj  *pMobObj,  int  Socket) const
  */
 bool Interp4Move::ReadParams(std::istream& Strm_CmdsList)
 {
-  Strm_CmdsList >> nazwa_obiektu >> _Speed_mmS >> dlugosc_drogi;
+  Strm_CmdsList >> sName >> _Speed_mmS >> dlugosc_drogi;
+  if (Strm_CmdsList.fail()) return false;
   return true;
 }
 

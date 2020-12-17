@@ -1,4 +1,8 @@
 #include <iostream>
+#include <string>
+#include <unistd.h>
+
+#include "Vector3D.hh"
 #include "Interp4Set.hh"
 #include "MobileObj.hh"
 
@@ -33,14 +37,14 @@ Interp4Set::Interp4Set()
 
 
 /*!
- *
+ *	\brief funkcja wypisuje wczytane parametry w terminalu.
  */
 void Interp4Set::PrintCmd() const
 {
   /*
    *  Tu trzeba napisać odpowiednio zmodyfikować kod poniżej.
    */
-  cout << GetCmdName() << " " << wsp_x  << " " << wsp_y  << " " << rot_z  << " "<< endl;
+  cout << GetCmdName()<< " " << sName << " " << _X  << " " << _Y << ' ' << _Z << endl;
 }
 
 
@@ -56,25 +60,39 @@ const char* Interp4Set::GetCmdName() const
 /*!
  *
  */
-bool Interp4Set::ExecCmd( MobileObj  *pMobObj,  int  Socket) const
+bool Interp4Set::ExecCmd( Scene *pScena) const
 {
   /*
    *  Tu trzeba napisać odpowiedni kod.
    */
+
+	std::shared_ptr<MobileObj> pObject;
+	if (!pScena->Find(sName, pObject)){
+		std::cerr << "Object not found: " << sName << endl;
+		return 0;
+	}
+	Vector3D Pos;
+
+		// MODYFIKACJA
+		pScena->LockAccess();
+		Pos = pObject->GetPositoin_m();
+		pObject->SetPosition_m(Pos);
+		pScena->MarkChange();
+		pScena->UnlockAccess();
+		// KONIEC MODYFIKCAJI
+		usleep(1000000);
+	
   return true;
 }
 
 
 /*!
- *
+ *	\brief Funkcja wczytuje parametry z pliku do odpowiednich pol klasy.
  */
 bool Interp4Set::ReadParams(std::istream& Strm_CmdsList)
 {
-  /*
-   *  Tu trzeba napisać odpowiedni kod.
-   */
-   Strm_CmdsList >> nazwa_obiektu >> wsp_x >> wsp_y >> rot_z;
-   
+  Strm_CmdsList >> sName >> _X >> _Y >> _Z;
+  if (Strm_CmdsList.fail()) return false;
   return true;
 }
 
@@ -93,5 +111,5 @@ Interp4Command* Interp4Set::CreateCmd()
  */
 void Interp4Set::PrintSyntax() const
 {
-  cout << "   Move  NazwaObiektu  Szybkosc[m/s]  DlugoscDrogi[m]" << endl;
+  cout << "   Set  NazwaObiektu	  Wymiar X[m]	  Wymiar Y[m]	  Wymiar Z[m]" << endl;
 }

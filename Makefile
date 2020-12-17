@@ -18,15 +18,28 @@ __plugin__:
 
 CPPFLAGS=-Wall -pedantic -std=c++17 -Iinc
 LDFLAGS=-Wall
+FILE=klient
+OBJ=obj
+SRC=src
+APP=./klient
+COMPFLAGS= -iquote inc -W -Wall -std=c++17 -pedantic 
+LINKFLAGS= -W -Wall 
+LIBS=-ldl -lpthread -lxerces-c
+LINKERFLAGS=-L/opt/lib -lxerces-c -lpthread -ldl
+COMPILERFLAGS=-I/opt/include
 
 
+interp: obj/main.o obj/LibInterface.o obj/xmlinterp.o
+	g++ ${LDFLAGS} -o interp  obj/main.o obj/LibInterface.o obj/xmlinterp.o ${LINKERFLAGS} ${LINKERFLAGS}
 
+obj/main.o: src/main.cpp inc/Interp4Command.hh inc/Set4LibInterfaces.hh inc/xmlinterp.hh
+	g++ -c ${CPPFLAGS} -o obj/main.o src/main.cpp ${COMPILERFLAGS}
 
-interp: obj/main.o
-	g++ ${LDFLAGS} -o interp  obj/main.o -ldl
-
-obj/main.o: src/main.cpp inc/Interp4Command.hh
-	g++ -c ${CPPFLAGS} -o obj/main.o src/main.cpp
+obj/LibInterface.o: src/LibInterface.cpp inc/LibInterface.hh
+	g++ -c ${CPPFLAGS} -o obj/LibInterface.o src/LibInterface.cpp
+	
+obj/xmlinterp.o: src/xmlinterp.cpp inc/xmlinterp.hh 
+	g++ -c ${CPPFLAGS} -o obj/xmlinterp.o src/xmlinterp.cpp ${COMPILERFLAGS}
 
 clean:
 	rm -f obj/* interp core*

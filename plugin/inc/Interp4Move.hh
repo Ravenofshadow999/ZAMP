@@ -1,7 +1,7 @@
 #ifndef COMMAND4MOVE_HH
 #define COMMAND4MOVE_HH
 
-#ifndef _GNUG__
+#ifndef __GNUG__
 # pragma interface
 # pragma implementation
 #endif
@@ -31,7 +31,7 @@ class Interp4Move: public Interp4Command {
    */
    
   double  _Speed_mmS;
-  std::string nazwa_obiektu;
+  std::string sName;
   double dlugosc_drogi;
   
   
@@ -43,28 +43,28 @@ class Interp4Move: public Interp4Command {
   /*!
    * \brief Wyświetla postać bieżącego polecenia (nazwę oraz wartości parametrów)
    */
-  virtual void PrintCmd() const;
+  virtual void PrintCmd() const override ;
   /*!
    * \brief Wyświetla składnię polecenia
    */
-  virtual void PrintSyntax() const;
+  virtual void PrintSyntax() const override ;
   /*!
    * \brief Wyświetla nazwę polecenia
    */
-  virtual const char* GetCmdName() const;
+  virtual const char* GetCmdName() const override ;
   /*!
    * \brief Wykonuje polecenie oraz wizualizuje jego realizację
    */
-  virtual bool ExecCmd( MobileObj  *pMobObj, int Socket) const;
+  virtual bool ExecCmd( Scene *pScena) const override ;
   /*!
    * \brief Czyta wartości parametrów danego polecenia
    */
-  virtual bool ReadParams(std::istream& Strm_CmdsList);
+  virtual bool ReadParams(std::istream& Strm_CmdsList) override ;
   /*!
    * \brief Wczytuje wartości parametrów. Przyjmuje nastepujace parametry:
    * \param Strm_CmdsList - adres strumienia wejsciowego
    */
-  virtual void PrintParams() {}
+  virtual void PrintParams(){}
   /*!
    * \brief
    *

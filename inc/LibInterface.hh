@@ -9,19 +9,48 @@
 
 #include "Interp4Command.hh"
 
+//obsluguje klase Set4LibsInterfaces, ktora jest mapa wtyczek
+
+/*!
+ * \file
+ * \brief Zawiera definicję klasy LibInterface
+ */
+
+
+/*!
+ * \brief Obsluguje klase Set4LibsInterfaces, ktora jest mapa wtyczek
+ */
+
 class LibInterface
-{
-	void * _pLibHnd;
-	std::string _CmdName;
+{	
+	/*!
+   * 	\brief Parametry klasy 
+   * 	\param pLibHnd - wskaznik do biblioteki
+   * 	\param sCmdName - przechowuje nazwe komendy
+   * 
+   */
+	void * pLibHnd;
+	std::string sCmdName;
 	Interp4Command *(*pCreateCmd)(void);
-	void *pFun;
 	
 	public:
-	LibInterface(const std::string LibPath);
-	~Libinterface(delete pCmd; dlclose(pLibHnd););
+	/*!
+    * \brief Konstruktor.
+    */
+	explicit LibInterface(const std::string sLibName);
+	/*!
+    * \brief Destruktor.
+    */
+	~LibInterface(){};
 	
-	Interp4Command *CreateCmd() {return _pCreateCmd();}
-	const std::string GetCmdName(){return _CmdName;}
+	Interp4Command *CreateCmd() {return pCreateCmd();}
+	/*!
+   * \brief Dostęp do nazwy komendy.
+   *
+   * Dostęp do nazwy komendy.
+   * \retval sCmdName
+   */
+	const std::string GetCmdName(){return sCmdName;}
 	
 };
 

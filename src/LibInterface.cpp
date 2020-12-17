@@ -1,27 +1,31 @@
 #include "LibInterface.hh"
 
-LibInterface(const std::string sLibName)
+
+LibInterface::LibInterface(const std::string sLibName)
 {
-	//jak nie zadziala uzyj tego:
-	//void *LibHnd = dlopen(LibPath.c_str(),RTLD_LAZY);
-	//void *Fun;
-	this->pLibHnd = dlopen(sLibName.c_str(),RTLD_LAZY);
+	//std::cout << "Lib_name: " << sLibName << std::endl;
+	//const std::string temp = "/home/raven/Pulpit/Zamp/Od_nowa/zalazek/libs/"+sLibName;
+	//std::cout << "temp: " << temp << std::endl;
 	
-	if (!this->pLibHnd) 
+	void *LibHnd = dlopen(sLibName.c_str(),RTLD_LAZY);
+	void *Fun;
+	
+	if (!LibHnd) 
 	{
-		cerr << "!!! Brak biblioteki: " << LibPath << std::endl;
-		return 1;
+		std::cerr << "err:\t" << dlerror() << std::endl;
+		std::cerr << "!!! Brak biblioteki: " << sLibName << std::endl;
+		throw 1;
 	}
 	
-	this->pFun = dlsym(this->pLibHnd,"CreateCmd");
-	if (!this->pFun) 
+	Fun = dlsym(LibHnd,"CreateCmd");
+	if (!Fun) 
 	{
-		cerr << "!!! Nie znaleziono funkcji CreateCmd" << std::endl;
-		return 1;
+		std::cerr << "!!! Nie znaleziono funkcji CreateCmd" << std::endl;
+		throw 2;
 	}
 	  
-	pCreateCmd = *reinterpret_cast<Interp4Command* (**)(void)>(&this->pFun);
-	//this->pLibHnd = LibHnd;
+	pCreateCmd = *reinterpret_cast<Interp4Command* (**)(void)>(&Fun);
+	this->pLibHnd = LibHnd;
 	this-> sCmdName = pCreateCmd()->GetCmdName();
 	
 	

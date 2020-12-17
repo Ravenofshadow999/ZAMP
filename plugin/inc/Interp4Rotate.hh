@@ -1,5 +1,5 @@
-#ifndef  COMMAND4ROTATE_HH
-#define  COMMAND4ROTATE_HH
+#ifndef COMMAND4ROTATE_HH
+#define COMMAND4ROTATE_HH
 
 #ifndef __GNUG__
 # pragma interface
@@ -11,9 +11,9 @@
 
 /*!
  * \file
- * \brief Definicja klasy Interp4Rotate
+ * \brief Definicja klasy Interp4Move
  *
- * Plik zawiera definicję klasy Interp4Rotate ...
+ * Plik zawiera definicję klasy Interp4Move ...
  */
 
 /*!
@@ -23,14 +23,16 @@
  */
 class Interp4Rotate: public Interp4Command {
   /*!
-   *  \brief Klasa odpowiedzialna za obracanie wybranym obiektem wokol jego osi.
-   * \param predkosc_katowa - wyraza z jaka predkoscia nalezy obracac obiektem. Wyrazany w stopniach/s.
-   * \param nazwa_obiektu - przechowuje nazwe obracanego obiektu.
-   * \param kat - wartosc o jaka nalezy obrocic obiekt. Wyrazany w stopniach.
+   * 	\brief Parametry klasy 
+   * 	\param _Speed - predkosc obrotu wyrazona w katach/sekunde
+   * 	\param sName - nazwa obiektu
+   * 	\param stopnie - o ile stopni obrocic obiekt, wyrazone w stopniach
    */
-  double  predkosc_katowa;
-  std::string nazwa_obiektu;
-  double kat;
+   
+  double  _Speed;
+  std::string sName;
+  double stopnie;
+  
   
  public:
   /*!
@@ -40,31 +42,32 @@ class Interp4Rotate: public Interp4Command {
   /*!
    * \brief Wyświetla postać bieżącego polecenia (nazwę oraz wartości parametrów)
    */
-  virtual void PrintCmd() const;
+  virtual void PrintCmd() const override ;
   /*!
    * \brief Wyświetla składnię polecenia
    */
-  virtual void PrintSyntax() const;
+  virtual void PrintSyntax() const override ;
   /*!
    * \brief Wyświetla nazwę polecenia
    */
-  virtual const char* GetCmdName() const;
+  virtual const char* GetCmdName() const override ;
   /*!
    * \brief Wykonuje polecenie oraz wizualizuje jego realizację
    */
-  virtual bool ExecCmd( MobileObj  *pMobObj, int Socket) const;
+  virtual bool ExecCmd( Scene *pScena) const override ;
   /*!
    * \brief Czyta wartości parametrów danego polecenia
    */
-  virtual bool ReadParams(std::istream& Strm_CmdsList);
+  virtual bool ReadParams(std::istream& Strm_CmdsList) override ;
   /*!
-   * \brief Wyświetla wartości wczytanych parametrów
+   * \brief Wczytuje wartości parametrów. Przyjmuje nastepujace parametry:
+   * \param Strm_CmdsList - adres strumienia wejsciowego
    */
-  virtual void PrintParams() {}
+  virtual void PrintParams(){}
   /*!
    * \brief
    *
-   *  Ta metoda nie musi być zdefiniowna w klasie bazowej.
+   *  Wypisuje wczytane parametry w terminalu.
    */
   static Interp4Command* CreateCmd();
  };

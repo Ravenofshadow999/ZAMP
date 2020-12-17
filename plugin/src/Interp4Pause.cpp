@@ -1,4 +1,8 @@
 #include <iostream>
+#include <string>
+#include <unistd.h>
+
+#include "Vector3D.hh"
 #include "Interp4Pause.hh"
 #include "MobileObj.hh"
 
@@ -28,24 +32,24 @@ Interp4Command* CreateCmd(void)
 /*!
  *
  */
-Interp4Pause::Interp4Pause(): czas_pauzy(0)
+Interp4Pause::Interp4Pause()
 {}
 
 
 /*!
- *
+ *	\brief funkcja wypisuje wczytane parametry w terminalu.
  */
 void Interp4Pause::PrintCmd() const
 {
   /*
    *  Tu trzeba napisać odpowiednio zmodyfikować kod poniżej.
    */
-  cout << GetCmdName() << " " << czas_pauzy << endl;
+  cout << GetCmdName()<< " " << _CzasTrwania  << endl;
 }
 
 
 /*!
- *	\brief Wypisuje nazwe komendy
+ *
  */
 const char* Interp4Pause::GetCmdName() const
 {
@@ -56,21 +60,27 @@ const char* Interp4Pause::GetCmdName() const
 /*!
  *
  */
-bool Interp4Pause::ExecCmd( MobileObj  *pMobObj,  int  Socket) const
+bool Interp4Pause::ExecCmd( Scene *pScena) const
 {
   /*
    *  Tu trzeba napisać odpowiedni kod.
    */
+ 
+	
+
+		usleep(_CzasTrwania);
+	
   return true;
 }
 
 
 /*!
- *
+ *	\brief Funkcja wczytuje parametry z pliku do odpowiednich pol klasy.
  */
 bool Interp4Pause::ReadParams(std::istream& Strm_CmdsList)
 {
-  Strm_CmdsList >> czas_pauzy;
+  Strm_CmdsList >> _CzasTrwania;
+  if (Strm_CmdsList.fail()) return false;
   return true;
 }
 
@@ -89,5 +99,5 @@ Interp4Command* Interp4Pause::CreateCmd()
  */
 void Interp4Pause::PrintSyntax() const
 {
-  cout << "   Move  NazwaObiektu  Szybkosc[m/s]  DlugoscDrogi[m]" << endl;
+  cout << "   Pause  NazwaObiektu  Czas trwania[ks]" << endl;
 }

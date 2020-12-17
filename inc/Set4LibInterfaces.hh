@@ -1,36 +1,73 @@
-#ifndef  SET4LIBINTERFACES_HH
-#define  SET4LIBINTERFACES_HH
-	
+#ifndef SET4LIBINTERFACES_HH
+#define 	SET4LIBINTERFACES_HH
+
 #include <map>
-#include <iostream>
+#include <cassert>
+#include <sstream>
 #include <string>
 #include <cstdio>
 #include <memory>
-#include <cassert>
-#include <sstream>
+#include <iostream>
+
 #include "LibInterface.hh"
 
-typedef std::map<const std::string, std::shared_ptr<LibInterface>> Set4Libs;	//zapisuje cala linijke do krotkiego Set4Libs, ktore staje sie jakby aliasem
+/*!
+ * \file
+ * \brief Definicja klasy Set4LinInterfaces
+ *
+ * Plik zawiera definicje klasy Set4LibInterfaces
+ */
 
-class Set4LibInterfaces{
+/*!
+ * \brief Obsluguje liste wtyczek
+ */
+
+typedef std::map<const std::string, std::shared_ptr<LibInterface>> Set4Libs;
+
+//klasa jest zbiorem dodanych wtyczek
+
+class Set4LibInterfaces
+{
+	/*!
+   * 	\brief Parametry klasy 
+   * 	\param _Set4Libs - lista wczytanych wtyczek
+   */
 	Set4Libs _Set4Libs;
 	
-	public:
-	void Add(const std::shared_ptr<LibInterface> PLibInterface)
+public:
+	Set4LibInterfaces(){std::cout << "Stworzono Set4Libs" << std::endl;};
+	/*!
+   * \brief Poiera rozmiar listy
+   * 
+   *  */
+	int getSize(){return _Set4Libs.size();}
+	
+	/*!
+   * \brief Dodaje pozycje do listy
+   * 
+   *  */
+	void Add(std::shared_ptr<LibInterface> &PLibInterface)
 	{
-		_Set4Libs.insert(std::pair<std::string,std::shared_ptr<LibInterface>>(PLibInterface->GetCmdName(),PLibInterface)); //dodaje pare: nazwa(string) i wskaznik do mapy wtyczek (cos w rodzaju listy)
+		_Set4Libs.insert(std::pair<std::string,std::shared_ptr<LibInterface>>(PLibInterface->GetCmdName(),PLibInterface));
 	}
 	
+	/*!
+   * \brief Szuka w liscie wtyczki o podanej nazwie
+   * 
+   *  */
 	bool Find(const std::string &Name, std::shared_ptr<LibInterface> &PLibInterface)
 	{
-		Set4Libs::const_iterator Iter = _Set4Libs.find(Name);	//tworzy iterator, ktory wyszukuje nazwe (string)
-		if (Iter == _Set4Libs.end()) return false;	//jesli doszedl do konca mapy i nic nie znalazl zwraca false
-		PLibInterface = Iter->second; //jezeli znalazl zapisuje do iteratora drugie pole z pary -> czyli wskaznik
+		Set4Libs::const_iterator Iter = _Set4Libs.find(Name);
+		if (Iter == _Set4Libs.end()) return false;
+		PLibInterface = Iter->second;
 		return true;
-     
 	}
+	
+	
+	
+	
 	
 	
 };
-	
+
 #endif

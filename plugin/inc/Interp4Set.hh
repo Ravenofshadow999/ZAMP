@@ -1,7 +1,7 @@
 #ifndef COMMAND4SET_HH
 #define COMMAND4SET_HH
 
-#ifndef _GNUG__
+#ifndef __GNUG__
 # pragma interface
 # pragma implementation
 #endif
@@ -11,9 +11,9 @@
 
 /*!
  * \file
- * \brief Definicja klasy Interp4Set
+ * \brief Definicja klasy Interp4Move
  *
- * Plik zawiera definicję klasy Interp4Set ...
+ * Plik zawiera definicję klasy Interp4Move ...
  */
 
 /*!
@@ -22,19 +22,19 @@
  *  Klasa modeluje ...
  */
 class Interp4Set: public Interp4Command {
-  /*! 
-   *  \brief Klasa odpowiedzialna za ustawienie wybranego obiektu w zadanym miejscu na scenie i zadanej orientacji.
-   * \param wsp_x - przechowuje wspolrzedna x obiektu. Wyrazone w mm.
-   * \param wsp_y - przechowuje wspolrzedna y obiektu. Wyrazone w mm.
-   * \param rot_z - przechowuje kat obrotu obiektu wokol osi z. Wyrazone w stopniach.
-   * \param nazwa_obiektu - przechowuje nazwe obracanego obiektu.
-   * 
+  /*!
+   * 	\brief Parametry klasy 
+   * 	\param _X - okresla wymiar obiektu w osi X
+   * 	\param _Y - okresla wymiar obiektu w osi Y
+   * 	\param _Z - okresla wymiar obiektu w osi Z
+   * 	\param sName - nazwa obiektu
    */
    
-  double  wsp_x;
-  double wsp_y;
-  double rot_z;
-  std::string nazwa_obiektu;
+  double  _X;
+  double  _Y;
+  double  _Z;
+  std::string sName;
+  
   
  public:
   /*!
@@ -44,31 +44,32 @@ class Interp4Set: public Interp4Command {
   /*!
    * \brief Wyświetla postać bieżącego polecenia (nazwę oraz wartości parametrów)
    */
-  virtual void PrintCmd() const;
+  virtual void PrintCmd() const override ;
   /*!
    * \brief Wyświetla składnię polecenia
    */
-  virtual void PrintSyntax() const;
+  virtual void PrintSyntax() const override ;
   /*!
    * \brief Wyświetla nazwę polecenia
    */
-  virtual const char* GetCmdName() const;
+  virtual const char* GetCmdName() const override ;
   /*!
    * \brief Wykonuje polecenie oraz wizualizuje jego realizację
    */
-  virtual bool ExecCmd( MobileObj  *pMobObj, int Socket) const;
+  virtual bool ExecCmd( Scene *pScena) const override ;
   /*!
    * \brief Czyta wartości parametrów danego polecenia
    */
-  virtual bool ReadParams(std::istream& Strm_CmdsList);
+  virtual bool ReadParams(std::istream& Strm_CmdsList) override ;
   /*!
-   * \brief Wyświetla wartości wczytanych parametrów
+   * \brief Wczytuje wartości parametrów. Przyjmuje nastepujace parametry:
+   * \param Strm_CmdsList - adres strumienia wejsciowego
    */
-  virtual void PrintParams() {}
+  virtual void PrintParams(){}
   /*!
    * \brief
    *
-   *  Ta metoda nie musi być zdefiniowna w klasie bazowej.
+   *  Wypisuje wczytane parametry w terminalu.
    */
   static Interp4Command* CreateCmd();
  };
